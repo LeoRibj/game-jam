@@ -1,0 +1,118 @@
+[gd_scene load_steps=8 format=3 uid="uid://uing1uv6fh2d"]
+
+[ext_resource type="Script" path="res://CharacterBody2D.gd" id="1_bu24k"]
+[ext_resource type="Texture2D" uid="uid://bebca6mtr6o4r" path="res://assets/ship/Ships/Medium/body_01.png" id="2_chkv6"]
+[ext_resource type="Texture2D" uid="uid://cyxjai6lj801k" path="res://assets/ship/Weapons/Small/Laser/turret_02_mk1_anim.png" id="3_karmj"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jplge"]
+radius = 27.0
+height = 134.0
+
+[sub_resource type="Animation" id="Animation_m7e16"]
+resource_name = "shoot"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ship_spri/cannon:hframes")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ship_spri/cannon:vframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ship_spri/cannon:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_1konv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ship_spri/cannon:hframes")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [6]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ship_spri/cannon:vframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ship_spri/cannon:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6em5n"]
+_data = {
+"RESET": SubResource("Animation_1konv"),
+"shoot": SubResource("Animation_m7e16")
+}
+
+[node name="ship1" type="CharacterBody2D"]
+script = ExtResource("1_bu24k")
+
+[node name="ship_spri" type="Sprite2D" parent="."]
+texture = ExtResource("2_chkv6")
+
+[node name="cannon" type="Sprite2D" parent="ship_spri"]
+position = Vector2(0, 2)
+scale = Vector2(2, 2)
+texture = ExtResource("3_karmj")
+hframes = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("CapsuleShape2D_jplge")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "shoot"
+libraries = {
+"": SubResource("AnimationLibrary_6em5n")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
